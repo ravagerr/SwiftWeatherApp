@@ -18,7 +18,7 @@ struct HourWeatherView: View {
                 .font(.body)
 
                 .padding(.horizontal)
-                .background(Color.white)
+                .background(Color.blue)
                 .foregroundColor(.black)
             
             if let _ = weatherMapViewModel.weatherDataModel {
@@ -36,7 +36,9 @@ struct HourWeatherView: View {
                 }
             }
         }
-        
+        .padding()
+        .background(Color.blue)
+        .cornerRadius(16)
     }
 }
 

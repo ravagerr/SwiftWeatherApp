@@ -25,12 +25,13 @@ struct WeatherForecastView: View {
                             }
                             .padding(.horizontal, 16)
                         }
-                        .frame(height: 180)
+                        .frame(height: 250)
+                        .background(Color.teal)
                     }
                     Divider()
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
-                    VStack { 
+                    VStack {
                         List {
                             ForEach(weatherMapViewModel.weatherDataModel?.daily ?? []) { day in
                                 DailyWeatherView(day: day)
@@ -51,7 +52,6 @@ struct WeatherForecastView: View {
                         VStack{
                             Text("Weather Forecast for \(weatherMapViewModel.city)").font(.title3)
                                 .fontWeight(.bold)
-                            Text("See EPL examples from weeek 4 onwards")
                         }
                     }
                 }
