@@ -16,12 +16,12 @@ class WeatherMapViewModel: ObservableObject {
     @Published var coordinates: CLLocationCoordinate2D?
     @Published var region: MKCoordinateRegion = MKCoordinateRegion()
     init() {
-// MARK:  create Task to load London weather data when the app first launches
+// MARK:  create Task to load London weather data when the app first launches ✅ 
         Task {
             do {
-                try await getCoordinatesForCity()
+                try await getCoordinatesForCity(city: "London")
                 let weatherData = try await loadData(lat: coordinates?.latitude ?? 51.503300, lon: coordinates?.longitude ?? -0.079400)
-                
+                self.weatherDataModel = weatherData
                 print("Weather data loaded: \(String(describing: weatherData.timezone))")
                 
             } catch {
@@ -30,7 +30,7 @@ class WeatherMapViewModel: ObservableObject {
             }
         }
     }
-    func getCoordinatesForCity() async throws {
+    func getCoordinatesForCity(city: String) async throws {
 // MARK:  complete the code to get user coordinates for user entered place
 // and specify the map region
 
@@ -59,6 +59,7 @@ class WeatherMapViewModel: ObservableObject {
 
                 DispatchQueue.main.async {
                     self.weatherDataModel = weatherDataModel
+                    print(weatherDataModel)
                     print("weatherDataModel loaded")
                 }
 

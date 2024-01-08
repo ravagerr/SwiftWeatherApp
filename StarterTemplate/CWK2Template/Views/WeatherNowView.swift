@@ -24,7 +24,7 @@ struct WeatherNowView: View {
                         Task {
                             do {
                                 // write code to process user change of location ✅
-                                try await weatherMapViewModel.getCoordinatesForCity()
+                                try await weatherMapViewModel.getCoordinatesForCity(city: temporaryCity)
                                 if let lat = weatherMapViewModel.coordinates?.latitude, let lon = weatherMapViewModel.coordinates?.longitude {
                                     let weatherData = try await weatherMapViewModel.loadData(lat: lat, lon: lon)
                                     DispatchQueue.main.async {
@@ -74,6 +74,12 @@ struct WeatherNowView: View {
                     // Weather Temperature Value
                     if let forecast = weatherMapViewModel.weatherDataModel {
                         VStack {
+                            HStack {
+                                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(forecast.current.weather[0].icon).png"))
+                                    .frame(width: 50, height: 50)
+                                Text(forecast.current.weather[0].weatherDescription.rawValue.capitalized)
+                                    .font(.system(size: 25, weight: .medium))
+                            }
                             HStack {
                                 Image("temperature")
                                     .resizable()
