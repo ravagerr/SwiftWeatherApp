@@ -129,7 +129,7 @@ enum Description: String, Codable { //enhancements fixed these to lower case and
     case raggedShowerRain = "ragged shower rain"
     case lightSnow = "light snow"
     case Snow = "snow"
-    case HeavySnow = "Heavy snow"
+    case HeavySnow = "heavy snow"
     case Sleet = "sleet"
     case LightShowerSleet = "light shower sleet"
     case ShowerSleet = "shower sleet"
