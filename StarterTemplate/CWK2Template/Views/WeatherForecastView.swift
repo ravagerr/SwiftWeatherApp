@@ -45,17 +45,17 @@ struct WeatherForecastView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            HStack {
-                                Image(systemName: "sun.min.fill")
-                                VStack{
-                                    Text("Weather Forecast for \(weatherMapViewModel.city)").font(.title3)
-                                        .fontWeight(.bold)
-                                    Text("See EPL examples from weeek 4 onwards")
-                                }
-                            }
+                ToolbarItem(placement: .principal) {
+                    HStack {
+                        Image(systemName: "sun.min.fill")
+                        VStack{
+                            Text("Weather Forecast for \(weatherMapViewModel.city)").font(.title3)
+                                .fontWeight(.bold)
+                            Text("See EPL examples from weeek 4 onwards")
                         }
                     }
+                }
+            }
         }
     }
 }
