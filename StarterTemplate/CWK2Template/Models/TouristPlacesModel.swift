@@ -18,7 +18,6 @@ struct TouristPlaceModel: Codable, Identifiable {
     let imageNames: [String]
     let link: String
     
-    
 static func loadTouristPlaces() -> [TouristPlaceModel] {
     guard let url = Bundle.main.url(forResource: "places", withExtension: "json"),
           let data = try? Data(contentsOf: url) else {

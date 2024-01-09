@@ -14,7 +14,6 @@ struct TouristPlacesMapView: View {
     @State var touristPlaces: [TouristPlaceModel] = []
     
     @EnvironmentObject var weatherMapViewModel: WeatherMapViewModel
-    @State var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5216871, longitude: -0.1391574), latitudinalMeters: 600, longitudinalMeters: 600)
     
     func loadFilteredTouristPlaces() {
         if let currentCoordinates = weatherMapViewModel.coordinates {
@@ -24,12 +23,11 @@ struct TouristPlacesMapView: View {
         }
     }
     
-    
     var body: some View {
         NavigationView {
             VStack {
                 if weatherMapViewModel.coordinates != nil {
-                    Map(coordinateRegion: $mapRegion, showsUserLocation: true, annotationItems: touristPlaces) { place in
+                    Map(coordinateRegion: $weatherMapViewModel.region, showsUserLocation: true, annotationItems: touristPlaces) { place in
                         MapMarker(coordinate: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude))
                     }
                 }
