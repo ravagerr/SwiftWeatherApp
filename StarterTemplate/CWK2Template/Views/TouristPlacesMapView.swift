@@ -46,11 +46,7 @@ struct TouristPlacesMapView: View {
                                        .cornerRadius(10)
                                    Text(place.name)
                                } .onTapGesture {
-                                   print(place.link)
-                                   guard let url = URL(string: place.link) else {
-                                     return
-                                   }
-                                   UIApplication.shared.openURL(url)
+                                   UIApplication.shared.open(URL(string: place.link)!)
                                }
                             }
                         }
