@@ -122,7 +122,8 @@ struct WeatherNowView: View {
             Image("sky")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .padding(.bottom, 130)
+                .padding(.bottom, 160)
+                .padding(.horizontal, -5)
                 .opacity(0.7)
         )
     }
