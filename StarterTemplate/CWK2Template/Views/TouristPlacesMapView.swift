@@ -12,6 +12,7 @@ import MapKit
 
 struct TouristPlacesMapView: View {
     @State var touristPlaces: [TouristPlaceModel] = []
+    
     @EnvironmentObject var weatherMapViewModel: WeatherMapViewModel
     @State var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5216871, longitude: -0.1391574), latitudinalMeters: 600, longitudinalMeters: 600)
     
@@ -23,12 +24,14 @@ struct TouristPlacesMapView: View {
         }
     }
     
+    
     var body: some View {
         NavigationView {
             VStack {
                 if weatherMapViewModel.coordinates != nil {
-                    Map(coordinateRegion: $mapRegion, showsUserLocation: true)
-                        .edgesIgnoringSafeArea(.top)
+                    Map(coordinateRegion: $mapRegion, showsUserLocation: true, annotationItems: touristPlaces) { place in
+                        MapMarker(coordinate: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude))
+                    }
                 }
                 Text("Tourist Attractions in \(touristPlaces.first?.cityName ?? "N/A")")
                     .font(.title)

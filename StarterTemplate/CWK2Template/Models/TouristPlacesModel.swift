@@ -8,7 +8,8 @@
 import Foundation
 import CoreLocation
 
-struct TouristPlaceModel: Codable {
+struct TouristPlaceModel: Codable, Identifiable {
+    let id = UUID()
     let name: String
     let cityName: String
     let latitude: Double
@@ -16,6 +17,7 @@ struct TouristPlaceModel: Codable {
     let description: String
     let imageNames: [String]
     let link: String
+    
     
 static func loadTouristPlaces() -> [TouristPlaceModel] {
     guard let url = Bundle.main.url(forResource: "places", withExtension: "json"),
