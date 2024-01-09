@@ -12,6 +12,7 @@ import MapKit
 
 struct TouristPlacesMapView: View {
     @State var touristPlaces: [TouristPlaceModel] = []
+    @State private var selectedPlace: TouristPlaceModel?
     
     @EnvironmentObject var weatherMapViewModel: WeatherMapViewModel
     
@@ -42,22 +43,74 @@ struct TouristPlacesMapView: View {
                         Text(place.name)
                     }
                     .onTapGesture {
-                        if let url = URL(string: place.link) {
-                            UIApplication.shared.open(url)
-                        }
+                        self.selectedPlace = place
                     }
                 }
                 .listStyle(PlainListStyle())
             }
-        }
-        .onAppear {
-            loadFilteredTouristPlaces()
+            .sheet(item: $selectedPlace) { place in
+                VStack {
+                    Text(place.description)
+                        .padding()
+                        .font(.title2)
+                        .bold()
+                    
+                    TabView {
+                        ForEach(place.imageNames, id: \.self) { imageName in
+                            Image(imageName)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    
+                    Text("Scroll to see more images")
+                        .font(.subheadline)
+                        .padding(.vertical, 5)
+                    
+                    Button(action: {
+                        openMapsForDirections(to: place)
+                    }) {
+                        Text("Get Directions")
+                            .bold()
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                    }
+                    
+                    Link(destination: URL(string: place.link)!) {
+                        Text("Learn More")
+                            .bold()
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .padding()
+                    }
+                }
+            }
+            .onAppear {
+                loadFilteredTouristPlaces()
+            }
         }
     }
-}
-
-struct TouristPlacesMapView_Previews: PreviewProvider {
-    static var previews: some View {
-        TouristPlacesMapView().environmentObject(WeatherMapViewModel())
+    
+    func openMapsForDirections(to place: TouristPlaceModel) {
+        let destination = CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)
+        let placemark = MKPlacemark(coordinate: destination)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = place.name
+        mapItem.openInMaps(launchOptions: [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving])
+    }
+    
+    
+    struct TouristPlacesMapView_Previews: PreviewProvider {
+        static var previews: some View {
+            TouristPlacesMapView().environmentObject(WeatherMapViewModel())
+        }
     }
 }
