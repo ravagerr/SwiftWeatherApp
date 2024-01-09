@@ -33,6 +33,8 @@ struct TouristPlacesMapView: View {
                             .edgesIgnoringSafeArea(.top)
                     }
                 }
+                Text("Tourist Attractions in \(touristPlaces.first?.cityName ?? "N/A")")
+                    .font(.title)
                 List{
                     HStack{
                         VStack {
