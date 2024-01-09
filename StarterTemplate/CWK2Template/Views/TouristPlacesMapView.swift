@@ -13,54 +13,47 @@ import MapKit
 struct TouristPlacesMapView: View {
     @State var touristPlaces: [TouristPlaceModel] = []
     @EnvironmentObject var weatherMapViewModel: WeatherMapViewModel
-    @State var locations: [Location] = []
-    @State var  mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5216871, longitude: -0.1391574), latitudinalMeters: 600, longitudinalMeters: 600)
+    @State var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5216871, longitude: -0.1391574), latitudinalMeters: 600, longitudinalMeters: 600)
     
     func loadFilteredTouristPlaces() {
-           if let currentCoordinates = weatherMapViewModel.coordinates {
-               touristPlaces = TouristPlaceModel.filterPlaces(for: currentCoordinates)
-           } else {
-               touristPlaces = TouristPlaceModel.loadTouristPlaces()
-           }
-       }
+        if let currentCoordinates = weatherMapViewModel.coordinates {
+            touristPlaces = TouristPlaceModel.filterPlaces(for: currentCoordinates)
+        } else {
+            touristPlaces = TouristPlaceModel.loadTouristPlaces()
+        }
+    }
     
     var body: some View {
         NavigationView {
-            VStack() {
+            VStack {
                 if weatherMapViewModel.coordinates != nil {
-                    VStack(){
-                        Map(coordinateRegion: $mapRegion, showsUserLocation: true)
-                            .edgesIgnoringSafeArea(.top)
-                    }
+                    Map(coordinateRegion: $mapRegion, showsUserLocation: true)
+                        .edgesIgnoringSafeArea(.top)
                 }
                 Text("Tourist Attractions in \(touristPlaces.first?.cityName ?? "N/A")")
                     .font(.title)
-                List{
-                    HStack{
-                        VStack {
-                            ForEach(touristPlaces, id: \.name) { place in
-                               HStack {
-                                   Image(place.imageNames.first ?? "london-tower-1")
-                                       .resizable()
-                                       .frame(width: 100, height: 100)
-                                       .cornerRadius(10)
-                                   Text(place.name)
-                               } .onTapGesture {
-                                   UIApplication.shared.open(URL(string: place.link)!)
-                               }
-                            }
+                List(touristPlaces, id: \.name) { place in
+                    HStack {
+                        Image(place.imageNames.first ?? "london-tower-1")
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(10)
+                        Text(place.name)
+                    }
+                    .onTapGesture {
+                        if let url = URL(string: place.link) {
+                            UIApplication.shared.open(url)
                         }
                     }
                 }
+                .listStyle(PlainListStyle())
             }
         }
         .onAppear {
-            // process the loading of tourist places
             loadFilteredTouristPlaces()
         }
     }
 }
-
 
 struct TouristPlacesMapView_Previews: PreviewProvider {
     static var previews: some View {
