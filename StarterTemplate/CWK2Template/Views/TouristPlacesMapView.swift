@@ -11,44 +11,54 @@ import CoreLocation
 import MapKit
 
 struct TouristPlacesMapView: View {
+    @State var touristPlaces: [TouristPlaceModel] = []
     @EnvironmentObject var weatherMapViewModel: WeatherMapViewModel
     @State var locations: [Location] = []
     @State var  mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.5216871, longitude: -0.1391574), latitudinalMeters: 600, longitudinalMeters: 600)
+    
+    func loadFilteredTouristPlaces() {
+           if let currentCoordinates = weatherMapViewModel.coordinates {
+               touristPlaces = TouristPlaceModel.filterPlaces(for: currentCoordinates)
+           } else {
+               touristPlaces = TouristPlaceModel.loadTouristPlaces()
+           }
+       }
+    
     var body: some View {
         NavigationView {
-            VStack(spacing: 5) {
+            VStack() {
                 if weatherMapViewModel.coordinates != nil {
-                    VStack(spacing: 10){
+                    VStack(){
                         Map(coordinateRegion: $mapRegion, showsUserLocation: true)
-                            .edgesIgnoringSafeArea(.all)
-                            .frame(height: 300)
-                        VStack{
-                            Text("This is a locally defined map for starter template")
-                            Text("A map of the user-entered location should be shown here")
-                            Text("Map should also show pins of tourist places")
-                        }.multilineTextAlignment(.leading)
-                            .lineLimit(nil)
-                            .fixedSize(horizontal: false, vertical: true)
+                            .edgesIgnoringSafeArea(.top)
                     }
                 }
                 List{
                     HStack{
                         VStack {
-                            Text("Tourist place Image")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            Text("Tourist place details")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                            Text("See images in coursework spec")
+                            ForEach(touristPlaces, id: \.name) { place in
+                               HStack {
+                                   Image(place.imageNames.first ?? "london-tower-1")
+                                       .resizable()
+                                       .frame(width: 100, height: 100)
+                                       .cornerRadius(10)
+                                   Text(place.name)
+                               } .onTapGesture {
+                                   print(place.link)
+                                   guard let url = URL(string: place.link) else {
+                                     return
+                                   }
+                                   UIApplication.shared.openURL(url)
+                               }
+                            }
                         }
                     }
                 }
-            }.frame(height:700)
-                .padding()
+            }
         }
         .onAppear {
             // process the loading of tourist places
+            loadFilteredTouristPlaces()
         }
     }
 }
@@ -56,6 +66,6 @@ struct TouristPlacesMapView: View {
 
 struct TouristPlacesMapView_Previews: PreviewProvider {
     static var previews: some View {
-        TouristPlacesMapView()
+        TouristPlacesMapView().environmentObject(WeatherMapViewModel())
     }
 }

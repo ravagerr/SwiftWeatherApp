@@ -1,6 +1,13 @@
 {
   "images" : [
     {
+      "filename" : "appcon 1.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "filename" : "appcon 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
